@@ -1,12 +1,12 @@
 {
-  "name": "@flourish/template-examples-circle",
+  "name": "@flourish/template-examples-draggable-circle",
   "version": "1.0.0",
-  "description": "Flourish sample template: circle",
+  "description": "Flourish sample template: draggable-circle",
   "main": "index.js",
   "directories": {},
   "dependencies": {
-    "d3-selection": "^1.0.3",
-    "d3-transition": "^1.0.3",
+    "@flourish/smooth-resize": "^0.1.0",
+    "d3": "^4.4.1",
     "rollup": "^0.41.4",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1"
