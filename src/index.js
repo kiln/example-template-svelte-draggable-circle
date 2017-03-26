@@ -1,5 +1,6 @@
-import * as d3 from "d3";
-import smoothResize from "@flourish/smooth-resize";
+import App from './App.html';
+import tween from './tween.js';
+import * as eases from 'eases-jsnext';
 
 export var state = {
 	radius: 30,
@@ -13,61 +14,35 @@ export var state = {
 	y_proportion: 1/2
 };
 
-var svg, circle;
-var w = window.innerWidth,
-    h = window.innerHeight;
+var lastState = Object.assign( {}, state );
+var currentTween;
+var app;
 
-// Clamp the x and y coordinates so the whole circle is visible, including the stroke
-function clampX(x) {
-	var visible_radius = state.radius + state.stroke / 2;
-	return Math.max(visible_radius, Math.min(w - visible_radius, Math.round(x)));
-}
-function clampY(y) {
-	var visible_radius = state.radius + state.stroke / 2;
-	return Math.max(visible_radius, Math.min(h - visible_radius, Math.round(y)));
-}
-
-// This is used by both the draw() and update() functions, taking advantage of the fact
-// that D3 selections and transitions both have an .attr() method.
-function setAttributesFromState(selection_or_transition) {
-	var x = clampX(w * state.x_proportion),
-	    y = clampY(h * state.y_proportion);
-
-	selection_or_transition
-		.attr("transform", "translate(" + x + "," + y + ")")
-		.attr("r", state.radius)
-		.attr("fill", state.color)
-		.attr("stroke", "black")
-		.attr("stroke-width", state.stroke);
-}
-
+// Initialise the graphic
 export function draw() {
-	svg = d3.select(document.body).append("svg").attr("width", w).attr("height", h);
+	app = new App({
+		target: document.body,
+		data: lastState
+	});
 
-	// Create the SVG circle, and set up the drag handler
-	circle = svg.append("circle")
-		.call(d3.drag().on("drag", function() {
-			state.x_proportion = clampX(d3.event.x) / w;
-			state.y_proportion = clampY(d3.event.y) / h;
-
-			setAttributesFromState(circle);
-		}));
-
-	// Initialise the circle’s attributes from the state
-	setAttributesFromState(circle);
+	app.on( 'drag', function ( newState ) {
+		if ( currentTween ) currentTween.stop();
+		Object.assign( state, newState );
+		app.set( state );
+		lastState = Object.assign( {}, state );
+	});
 }
-
-// Keep the centre of the circle in the same relative position as the window is resized
-smoothResize(function(width, height) {
-	// Update the 'w' and 'h' variables, and resize the SVG
-	svg.attr("width", w = width).attr("height", h = height);
-
-	// Check 'circle' is defined to deal with the unlikely case
-	// the window is resized before draw() has been called
-	if (circle) setAttributesFromState(circle);
-});
 
 // Animate to the new state
 export function update() {
-	setAttributesFromState(circle.transition());
+	if (state.radius <= 0) throw new Error("Radius must be positive");
+
+	if ( currentTween ) currentTween.stop();
+	currentTween = tween( lastState, state, function ( state ) {
+		app.set( state );
+		lastState = state;
+	}, {
+		duration: 400,
+		easing: eases.cubicInOut
+	});
 }
