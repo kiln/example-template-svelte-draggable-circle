@@ -1,6 +1,6 @@
-id: draggable-circle
-name: Draggable circle
-author: Flourish team
+id: svelte-draggable-circle
+name: Svelte Draggable circle
+author: Rich Harris
 sdk_version: 2
 
 settings:
