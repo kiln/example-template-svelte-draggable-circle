@@ -1,11 +1,7 @@
-# Sample Flourish template: circle
+# Sample Flourish template: Svelte draggable circle
 
-This sample template builds on the [simple circle example](https://github.com/kiln/example-template-circle),
-and demonstrates how user interaction can change the state. This template can be used in the
-Flourish Story Editor to create a story in which a circle moves about. It also demonstrates the
-use of the [smooth-resize module](https://www.npmjs.com/package/@flourish/smooth-resize) to
-update smoothly as the window is resized.
+This sample template demonstrates how to implement the [draggable circle example](https://github.com/kiln/example-template-draggable-circle) in [Svelte](https://svelte.technology/). True to form, the generated `template.js` output is tiny: a mere 6k, compared to 81k for the original example using D3.
 
 Use the [Flourish SDK](https://www.npmjs.com/package/@flourish/sdk) to try it out.
 
-The main code file for the template is [`src/index.js`](src/index.js).
+The main code file for the template is [`src/index.js`](src/index.js) and the app is [`src/App.html`](src/App.html).
