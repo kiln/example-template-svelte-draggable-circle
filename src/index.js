@@ -14,7 +14,7 @@ export var state = {
 	y_proportion: 1/2
 };
 
-var lastState = Object.assign( {}, state );
+var lastState;
 var currentTween;
 var app;
 
@@ -22,8 +22,10 @@ var app;
 export function draw() {
 	app = new App({
 		target: document.body,
-		data: lastState
+		data: state
 	});
+
+	lastState = Object.assign( {}, state );
 
 	app.on( 'drag', function ( newState ) {
 		if ( currentTween ) currentTween.stop();
