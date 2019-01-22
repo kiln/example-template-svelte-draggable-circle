@@ -1,8 +1,7 @@
 id: svelte-draggable-circle
 name: Svelte Draggable circle
 author: Rich Harris
-sdk_version: 2
-autoheight: 1x1
+sdk_version: 3
 
 settings:
   - property: radius
