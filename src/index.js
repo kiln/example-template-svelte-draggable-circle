@@ -1,8 +1,8 @@
-import App from './App.html';
+import App from './App.svelte';
 import tween from './tween.js';
 import * as eases from 'eases-jsnext';
 
-export var state = {
+export const state = {
 	radius: 30,
 	stroke: 1,
 	color: "#FF0000",
@@ -14,23 +14,24 @@ export var state = {
 	y_proportion: 1/2
 };
 
-var lastState;
-var currentTween;
-var app;
+let lastState;
+let currentTween;
+let app;
 
 // Initialise the graphic
 export function draw() {
 	app = new App({
 		target: document.body,
-		data: state
+		props: state
 	});
 
 	lastState = Object.assign( {}, state );
 
-	app.on( 'drag', function ( newState ) {
+	app.$on('drag', event => {
 		if ( currentTween ) currentTween.stop();
+		const { detail: newState } = event;
 		Object.assign( state, newState );
-		app.set( state );
+		app.$set( state );
 		lastState = Object.assign( {}, state );
 	});
 }
@@ -40,8 +41,9 @@ export function update() {
 	if (state.radius <= 0) throw new Error("Radius must be positive");
 
 	if ( currentTween ) currentTween.stop();
+
 	currentTween = tween( lastState, state, function ( state ) {
-		app.set( state );
+		app.$set( state );
 		lastState = state;
 	}, {
 		duration: 400,
